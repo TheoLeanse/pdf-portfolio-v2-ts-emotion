@@ -83,16 +83,16 @@ const Section = ({ odd }: SectionProps) => (
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
 const FixedRedButton = styled.button`
+  font-family: Helvetica, Arial, Sans-serif;
   position: fixed;
   bottom: 50px;
-  padding: 10px;
-  background-color: red;
+  padding: 15px;
+  background-color: crimson;
+  border: none;
   font-size: 24px;
-  color: black;
-  font-weight: bold;
-  &:hover {
-    color: white;
-  }
+  font-style: italic;
+  width: ${size.width + 150}px;
+  color: white;
   left: 50%;
   transform: translateX(-50%);
 `
