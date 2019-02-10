@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
@@ -54,31 +55,53 @@ const positions = (count: number) => Array.from(Array(count)).reduce(acc => acc.
 
 const isOdd = (n: number) => n % 2 !== 0
 
-const pdfs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20]
+const pdfs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20, 21, 22]
 
-const PdfsInSections = () => chunk(4, pdfs).map((pdfChunk, i) => <Section odd={isOdd(i)} />)
+const dynamicStyle = ({ height, width, x, y }: Shape) =>
+  // if the vw is greater than the paneDimensions, need to add half of the diference onto the x value
+  css`
+    height: ${height}px;
+    width: ${width}px;
+    transform: translate3d(calc(${x}px + calc(calc(100vw - ${paneDimensions.width}px) / 2)), ${y}px, 0);
+  `
+
+const Container = styled.div`
+  ${dynamicStyle};
+  position: absolute;
+  background: black;
+`
+
+const PdfsInSections = () =>
+  chunk(4, pdfs).map((pdfChunk, i) => (
+    <Section odd={isOdd(i)} key={pdfChunk[0]}>
+      {positions(pdfChunk.length).map((shape: Shape) => (
+        <Container key={`${shape.x}-${shape.y}`} {...shape} />
+      ))}
+    </Section>
+  ))
 
 interface SectionProps {
   odd: boolean
+  children: React.Component
 }
-const Section = ({ odd }: SectionProps) => (
-  <div
-    style={{
-      position: 'relative',
-      height: paneDimensions.height,
-      backgroundImage: odd ? `url(${workersClub})` : `url(${containerShip})`,
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}
-  >
-    {positions(4).map(({ height, width, x, y }: Shape) => (
-      <div
-        key={`${x}-${y}`}
-        style={{ height, width, position: 'absolute', background: 'black', transform: `translate3d(${x}px, ${y}px, 0)` }}
-      />
-    ))}
-  </div>
-)
+
+const ClubBackground = styled.div`
+  position: relative;
+  height: ${paneDimensions.height}px;
+  background-image: url(${workersClub});
+  background-position: center;
+  background-repeat: no-repeat;
+`
+const ShipBackground = styled.div`
+  position: relative;
+  height: ${paneDimensions.height}px;
+  background-image: url(${containerShip});
+  background-position: center;
+  background-repeat: no-repeat;
+`
+
+const Section = ({ odd, children }: SectionProps) =>
+  odd ? <ClubBackground>{children}</ClubBackground> : <ShipBackground>{children}</ShipBackground>
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
@@ -95,6 +118,7 @@ const FixedRedButton = styled.button`
   color: white;
   left: 50%;
   transform: translateX(-50%);
+  cursor: pointer;
 `
 
 const IndexLayout: React.SFC = ({ children }) => (
