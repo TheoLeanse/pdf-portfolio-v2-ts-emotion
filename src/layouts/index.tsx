@@ -55,8 +55,6 @@ const positions = (count: number) => Array.from(Array(count)).reduce(acc => acc.
 
 const isOdd = (n: number) => n % 2 !== 0
 
-const pdfs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20, 21, 22]
-
 const dynamicStyle = ({ height, width, x, y }: Shape) =>
   // if the vw is greater than the paneDimensions, need to add half of the diference onto the x value
   css`
@@ -71,14 +69,19 @@ const Container = styled.div`
   background: black;
 `
 
-const PdfsInSections = () =>
-  chunk(4, pdfs).map((pdfChunk, i) => (
+const PdfsInSections = () => {
+  const [pdfs, setPdfs] = useState([])
+  useEffect(() => {
+    setPdfs([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20, 21, 22])
+  }, [])
+  return chunk(4, pdfs).map((pdfChunk, i) => (
     <Section odd={isOdd(i)} key={pdfChunk[0]}>
       {positions(pdfChunk.length).map((shape: Shape) => (
         <Container key={`${shape.x}-${shape.y}`} {...shape} />
       ))}
     </Section>
   ))
+}
 
 interface SectionProps {
   odd: boolean
