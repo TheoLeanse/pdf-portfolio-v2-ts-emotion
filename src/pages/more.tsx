@@ -1,7 +1,6 @@
 import * as React from 'react'
-
 import IndexLayout from '../layouts'
 
-const IndexPage = () => <IndexLayout />
+const PageTwo = () => <IndexLayout />
 
-export default IndexPage
+export default PageTwo

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
+import { StaticQuery, graphql, Link } from 'gatsby'
 import { chunk } from 'lodash/fp'
 import 'modern-normalize'
 import '../styles/normalize'
@@ -147,7 +147,9 @@ const IndexLayout: React.SFC = ({ children }) => (
         />
         <LayoutMain>
           <PdfsInSections />
-          <FixedRedButton>T J Watson</FixedRedButton>
+          <Link to="/more">
+            <FixedRedButton>T J Watson</FixedRedButton>
+          </Link>
         </LayoutMain>
       </LayoutRoot>
     )}
