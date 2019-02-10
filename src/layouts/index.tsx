@@ -17,37 +17,26 @@ type StaticQueryProps = {
   }
 }
 
-const makeDecent = (x: number) => Math.ceil(x / 100)
-const dimensionRange = (extension: number, start: number) => Array.from(Array(makeDecent(extension))).map((x, i) => i + makeDecent(start))
+type Shape = { x: number; y: number; height: number; width: number }
 
-const arrayIncludesArray = (arrayToCheck: number[], arrayContaining: number[][]) => {
-  console.log('checking intersection')
-  return arrayContaining.some(array => array.every(item => arrayToCheck.includes(item)))
+const getCorners = ({ x, y, width, height }: Shape) => [[x, y], [x + width, y], [x, y + height], [x + width, y + height]]
+
+const pointIsInsideShape = ([pointX, pointY]: number[], { x: shapeX, y: shapeY, height, width }: Shape) => {
+  const isInXRange = shapeX <= pointX && pointX <= shapeX + width
+  const isInYRange = shapeY <= pointY && pointY <= shapeY + height
+  return isInXRange && isInYRange
 }
 
-const getTuple = ({ height, width, x, y }) => {
-  const xRange = dimensionRange(height, x)
-  const yRange = dimensionRange(width, y)
-  return xRange.map(xValue => yRange.map(yValue => [xValue, yValue])).reduce((acc, a) => acc.concat(a), [])
-}
-const doesOverlap = (
-  dimensionsA: { height: number; width: number; x: number; y: number },
-  dimensionsB: { height: number; width: number; x: number; y: number }
-) => {
-  const tupleA = getTuple(dimensionsA)
-  const tupleB = getTuple(dimensionsB)
-  return tupleA.some(tuple => arrayIncludesArray(tuple, tupleB))
-}
+const doesOverlap = (dimensionsA: Shape, dimensionsB: Shape) =>
+  getCorners(dimensionsA).some(corner => pointIsInsideShape(corner, { ...dimensionsB }))
 
 const availablePosition = (
   itemDimensions: { height: number; width: number },
   pane: { height: number; width: number },
-  placedItems: { height: number; width: number; x: number; y: number }[] = []
+  placedItems: Shape[] = []
 ): any => {
   const x = parseInt(String(Math.random() * pane.width), 10)
   const y = parseInt(String(Math.random() * pane.height), 10)
-
-  // could cheat and define a set of possible positions to select randomly, if performance is real bad
 
   return placedItems.some(item => doesOverlap({ ...itemDimensions, x, y }, item))
     ? availablePosition(itemDimensions, pane, placedItems)
