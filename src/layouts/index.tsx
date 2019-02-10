@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
-
+import { chunk } from 'lodash/fp'
 import 'modern-normalize'
 import '../styles/normalize'
 
@@ -35,8 +35,8 @@ const availablePosition = (
   pane: { height: number; width: number },
   placedItems: Shape[] = []
 ): any => {
-  const x = parseInt(String(Math.random() * pane.width), 10)
-  const y = parseInt(String(Math.random() * pane.height), 10)
+  const x = parseInt(String(Math.random() * (pane.width - itemDimensions.width)), 10)
+  const y = parseInt(String(Math.random() * (pane.height - itemDimensions.height)), 10)
 
   return placedItems.some(item => doesOverlap({ ...itemDimensions, x, y }, item))
     ? availablePosition(itemDimensions, pane, placedItems)
@@ -44,12 +44,32 @@ const availablePosition = (
 }
 
 const size = { height: 200, width: 175 }
-const paneDimensions = { height: 500, width: 1000 }
+const paneDimensions = { height: 750, width: 1100 }
 
 const positions = (count: number) => Array.from(Array(count)).reduce(acc => acc.concat(availablePosition(size, paneDimensions, acc)), [])
 
+const isOdd = (n: number) => n % 2 !== 0
+
+const pdfs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20]
+
 // split the number of PDFs present into groups of 4 (or 5) and create components with each group,
 // alternating the svg backgrounds provided
+const PdfsInSections = () => chunk(4, pdfs).map((pdfChunk, i) => <Section odd={isOdd(i)} />)
+
+const Section = ({ odd }) => {
+  return (
+    <div style={{ position: 'relative', height: paneDimensions.height, background: odd ? 'papayawhip' : 'lightgray' }}>
+      {positions(4).map(({ height, width, x, y }: Shape) => (
+        <div
+          key={`${x}-${y}`}
+          style={{ height, width, position: 'absolute', background: 'black', transform: `translate3d(${x}px, ${y}px, 0)` }}
+        />
+      ))}
+    </div>
+  )
+}
+
+console.log('PDFs in sections', PdfsInSections)
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
@@ -77,13 +97,7 @@ const IndexLayout: React.SFC = ({ children }) => (
           ]}
         />
         <LayoutMain>
-          {/* we want a pause before the pdfs at positions appear */}
-          {positions(4).map(({ height, width, x, y }) => (
-            <div
-              key={`${x}-${y}`}
-              style={{ position: 'absolute', background: 'black', height, width, transform: `translate3d(${x}px, ${y}px, 0)` }}
-            />
-          ))}
+          <PdfsInSections />
         </LayoutMain>
       </LayoutRoot>
     )}
