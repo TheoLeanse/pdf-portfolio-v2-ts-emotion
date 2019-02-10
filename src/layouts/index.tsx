@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
 import { chunk } from 'lodash/fp'
 import 'modern-normalize'
 import '../styles/normalize'
+
+import containerShip from '../container-ship.svg'
+import workersClub from '../workers-club.svg'
 
 import LayoutRoot from '../components/LayoutRoot'
 import LayoutMain from '../components/LayoutMain'
@@ -52,28 +56,46 @@ const isOdd = (n: number) => n % 2 !== 0
 
 const pdfs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20]
 
-// split the number of PDFs present into groups of 4 (or 5) and create components with each group,
-// alternating the svg backgrounds provided
 const PdfsInSections = () => chunk(4, pdfs).map((pdfChunk, i) => <Section odd={isOdd(i)} />)
 
-const Section = ({ odd }) => {
-  return (
-    <div style={{ position: 'relative', height: paneDimensions.height, background: odd ? 'papayawhip' : 'lightgray' }}>
-      {positions(4).map(({ height, width, x, y }: Shape) => (
-        <div
-          key={`${x}-${y}`}
-          style={{ height, width, position: 'absolute', background: 'black', transform: `translate3d(${x}px, ${y}px, 0)` }}
-        />
-      ))}
-    </div>
-  )
+interface SectionProps {
+  odd: boolean
 }
-
-console.log('PDFs in sections', PdfsInSections)
+const Section = ({ odd }: SectionProps) => (
+  <div
+    style={{
+      position: 'relative',
+      height: paneDimensions.height,
+      backgroundImage: odd ? `url(${workersClub})` : `url(${containerShip})`,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}
+  >
+    {positions(4).map(({ height, width, x, y }: Shape) => (
+      <div
+        key={`${x}-${y}`}
+        style={{ height, width, position: 'absolute', background: 'black', transform: `translate3d(${x}px, ${y}px, 0)` }}
+      />
+    ))}
+  </div>
+)
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
-// button to an about me page - fixed position
+const FixedRedButton = styled.button`
+  position: fixed;
+  bottom: 50px;
+  padding: 10px;
+  background-color: red;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+  &:hover {
+    color: white;
+  }
+  left: 50%;
+  transform: translateX(-50%);
+`
 
 const IndexLayout: React.SFC = ({ children }) => (
   <StaticQuery
@@ -98,6 +120,7 @@ const IndexLayout: React.SFC = ({ children }) => (
         />
         <LayoutMain>
           <PdfsInSections />
+          <FixedRedButton>T J Watson</FixedRedButton>
         </LayoutMain>
       </LayoutRoot>
     )}
