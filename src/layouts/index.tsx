@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql, Link } from 'gatsby'
@@ -12,6 +11,9 @@ import workersClub from '../workers-club.svg'
 
 import LayoutRoot from '../components/LayoutRoot'
 import LayoutMain from '../components/LayoutMain'
+import Container from '../components/Container'
+
+import { isOdd, positions } from '../utils'
 
 type StaticQueryProps = {
   site: {
@@ -22,62 +24,33 @@ type StaticQueryProps = {
   }
 }
 
-type Shape = { x: number; y: number; height: number; width: number }
-
-const getCorners = ({ x, y, width, height }: Shape) => [[x, y], [x + width, y], [x, y + height], [x + width, y + height]]
-
-const pointIsInsideShape = ([pointX, pointY]: number[], { x: shapeX, y: shapeY, height, width }: Shape) => {
-  const isInXRange = shapeX <= pointX && pointX <= shapeX + width
-  const isInYRange = shapeY <= pointY && pointY <= shapeY + height
-  return isInXRange && isInYRange
-}
-
-const doesOverlap = (dimensionsA: Shape, dimensionsB: Shape) =>
-  getCorners(dimensionsA).some(corner => pointIsInsideShape(corner, { ...dimensionsB }))
-
-const availablePosition = (
-  itemDimensions: { height: number; width: number },
-  pane: { height: number; width: number },
-  placedItems: Shape[] = []
-): any => {
-  const x = parseInt(String(Math.random() * (pane.width - itemDimensions.width)), 10)
-  const y = parseInt(String(Math.random() * (pane.height - itemDimensions.height)), 10)
-
-  return placedItems.some(item => doesOverlap({ ...itemDimensions, x, y }, item))
-    ? availablePosition(itemDimensions, pane, placedItems)
-    : { ...itemDimensions, x, y }
-}
-
 const size = { height: 200, width: 175 }
 const paneDimensions = { height: 750, width: 1100 }
 
-const positions = (count: number) => Array.from(Array(count)).reduce(acc => acc.concat(availablePosition(size, paneDimensions, acc)), [])
+const useVisibilityDelay = (delay: number) => {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const timeout = setTimeout(() => setVisible(true), delay)
+    return () => clearTimeout(timeout)
+  }, [])
+  return visible
+}
 
-const isOdd = (n: number) => n % 2 !== 0
-
-const dynamicStyle = ({ height, width, x, y }: Shape) =>
-  // if the vw is greater than the paneDimensions, need to add half of the diference onto the x value
-  css`
-    height: ${height}px;
-    width: ${width}px;
-    transform: translate3d(calc(${x}px + calc(calc(100vw - ${paneDimensions.width}px) / 2)), ${y}px, 0);
-  `
-
-const Container = styled.div`
-  ${dynamicStyle};
-  position: absolute;
-  background: black;
-`
+const useSetOnMount: <T>(initial: T, mounted: T) => T = (initial, mounted) => {
+  const [value, setValue] = useState(initial)
+  useEffect(() => {
+    setValue(mounted)
+  }, [])
+  return value
+}
 
 const PdfsInSections = () => {
-  const [pdfs, setPdfs] = useState([])
-  useEffect(() => {
-    setPdfs([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 20, 21, 22])
-  }, [])
+  const visible = useVisibilityDelay(750)
+  const pdfs = useSetOnMount([], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
   return chunk(4, pdfs).map((pdfChunk, i) => (
     <Section odd={isOdd(i)} key={pdfChunk[0]}>
-      {positions(pdfChunk.length).map((shape: Shape) => (
-        <Container key={`${shape.x}-${shape.y}`} {...shape} />
+      {positions(pdfChunk.length, size, paneDimensions).map((shape: Shape) => (
+        <Container key={`${shape.x}-${shape.y}`} {...shape} fullWidth={paneDimensions.width} visible={visible} />
       ))}
     </Section>
   ))

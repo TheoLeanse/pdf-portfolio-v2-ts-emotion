@@ -1,23 +1,30 @@
-import * as React from 'react'
+import { css, keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 
-import { widths } from '../styles/variables'
-import { getEmSize } from '../styles/mixins'
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
 
-const StyledContainer = styled.div`
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  width: auto;
-  max-width: ${getEmSize(widths.lg)}em;
+  to {
+    opacity: 1;
+  }
 `
 
-interface ContainerProps {
-  className?: string
-}
+const dynamicStyle = ({ height, width, x, y, fullWidth, visible }: Shape & { fullWidth: number; visible: boolean }) =>
+  // if the vw is greater than the paneDimensions, need to add half of the diference onto the x value
+  css`
+    height: ${height}px;
+    width: ${width}px;
+    visibility: ${visible ? 'visible' : 'hidden'};
+    animation: ${fadeIn} 0.75s ease-in;
+    transform: translate3d(calc(${x}px + calc(calc(100vw - ${fullWidth}px) / 2)), ${y}px, 0);
+  `
 
-const Container: React.SFC<ContainerProps> = ({ children, className }) => (
-  <StyledContainer className={className}>{children}</StyledContainer>
-)
+const Container = styled.div`
+  ${dynamicStyle};
+  position: absolute;
+  background: black;
+`
 
 export default Container

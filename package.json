@@ -51,6 +51,7 @@
     "prism-themes": "^1.0.1",
     "prismjs": "^1.15.0",
     "react": "^16.8.1",
+    "react-cache": "^2.0.0-alpha.1",
     "react-dom": "^16.8.1",
     "react-helmet": "^5.2.0",
     "typescript": "^3.0.3"
@@ -60,6 +61,7 @@
     "@types/lodash": "^4.14.120",
     "@types/node": "^10.10.1",
     "@types/react": "^16.8.2",
+    "@types/react-cache": "^2.0.0",
     "@types/react-dom": "^16.0.7",
     "@types/react-helmet": "^5.0.7",
     "eslint-plugin-react-hooks": "^1.0.1",
