@@ -17,3 +17,5 @@ declare module '*.module.css' {
 declare module '*.svg' {
   export = ''
 }
+
+type Shape = { x: number; y: number; height: number; width: number }
