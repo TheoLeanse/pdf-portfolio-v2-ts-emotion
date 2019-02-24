@@ -47,13 +47,17 @@ const useSetOnMount: <T>(initial: T, mounted: T) => T = (initial, mounted) => {
 const PdfsInSections = () => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
-  return chunk(4, pdfs).map((pdfChunk, i) => (
-    <Section odd={isOdd(i)} key={pdfChunk[0]}>
-      {positions(pdfChunk.length, size, paneDimensions).map((shape: Shape) => (
-        <Container key={`${shape.x}-${shape.y}`} {...shape} fullWidth={paneDimensions.width} visible={visible} />
+  return (
+    <>
+      {chunk(4, pdfs).map((pdfChunk, i) => (
+        <Section odd={isOdd(i)} key={pdfChunk[0]}>
+          {positions(pdfChunk.length, size, paneDimensions).map((shape: Shape) => (
+            <Container key={`${shape.x}-${shape.y}`} {...shape} fullWidth={paneDimensions.width} visible={visible} />
+          ))}
+        </Section>
       ))}
-    </Section>
-  ))
+    </>
+  )
 }
 
 interface SectionProps {

@@ -1,0 +1,20 @@
+backend:
+  name: github
+  repo: TheoLeanse/pdf-portfolio-v2-ts-emotion
+
+media_folder: static/assets
+public_folder: assets
+
+collections:
+  - label: PDF
+    name: pdf
+    folder: pdf
+    create: true
+    fields:
+      - {label: Title, name: title, widget: string}
+      - label: file
+        name: file
+        widget: file
+        media_library:
+          config:
+            multiple: true
