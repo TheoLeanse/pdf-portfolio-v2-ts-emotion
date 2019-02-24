@@ -13,7 +13,7 @@ import LayoutRoot from '../components/LayoutRoot'
 import LayoutMain from '../components/LayoutMain'
 import Container from '../components/Container'
 
-import { isOdd, positions } from '../utils'
+import { isOdd, withPositions } from '../utils'
 
 type StaticQueryProps = {
   site: {
@@ -58,6 +58,7 @@ interface PdfsInSectionsProps {
     file: string
   }[]
 }
+
 const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], props.pdfs)
@@ -65,24 +66,15 @@ const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
     <>
       {chunk(4, pdfs).map((pdfChunk, i) => (
         <Section odd={isOdd(i)} key={pdfChunk[0].file}>
-          {positions(pdfChunk.length, size, paneDimensions).map((shape: Shape) => (
-            <Container
-              key={`${shape.x}-${shape.y}`}
-              {...shape}
-              fullWidth={paneDimensions.width}
-              visible={visible}
-              onClick={() => console.log('TODO: Download PDFs')}
-            />
+          {withPositions(pdfChunk, size, paneDimensions).map(shape => (
+            <a href={shape.file} key={`${shape.x}-${shape.y}`} target="_blank">
+              <Container {...shape} fullWidth={paneDimensions.width} visible={visible} />
+            </a>
           ))}
         </Section>
       ))}
     </>
   )
-}
-
-interface SectionProps {
-  odd: boolean
-  children: React.Component
 }
 
 const ClubBackground = styled.div`
@@ -100,7 +92,7 @@ const ShipBackground = styled.div`
   background-repeat: no-repeat;
 `
 
-const Section = ({ odd, children }: SectionProps) =>
+const Section: React.SFC<{ odd: boolean }> = ({ odd, children }) =>
   odd ? <ClubBackground>{children}</ClubBackground> : <ShipBackground>{children}</ShipBackground>
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
