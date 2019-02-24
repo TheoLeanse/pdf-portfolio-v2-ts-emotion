@@ -25,4 +25,17 @@ export const availablePosition = (
 export const positions = (count: number, size: { height: number; width: number }, paneDimensions: { height: number; width: number }) =>
   Array.from(Array(count)).reduce(acc => acc.concat(availablePosition(size, paneDimensions, acc)), [])
 
+export const withPositions: <T>(
+  original: T[],
+  size: { height: number; width: number },
+  paneDimensions: { height: number; width: number }
+) => (T & Shape)[] = (original, size, paneDimensions) => {
+  const acc = []
+  for (const item of original) {
+    const position = availablePosition(size, paneDimensions, acc)
+    acc.push({ ...item, ...position })
+  }
+  return acc
+}
+
 export const isOdd = (n: number) => n % 2 !== 0
