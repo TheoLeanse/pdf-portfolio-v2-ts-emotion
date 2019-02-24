@@ -22,6 +22,15 @@ type StaticQueryProps = {
       description: string
     }
   }
+  allMarkdownRemark: {
+    edges: {
+      node: {
+        frontmatter: {
+          file: string
+        }
+      }
+    }
+  }
 }
 
 const size = { height: 200, width: 175 }
@@ -44,15 +53,26 @@ const useSetOnMount: <T>(initial: T, mounted: T) => T = (initial, mounted) => {
   return value
 }
 
-const PdfsInSections = () => {
+interface PdfsInSectionsProps {
+  pdfs: {
+    file: string
+  }[]
+}
+const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
-  const pdfs = useSetOnMount([], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
+  const pdfs = useSetOnMount([], props.pdfs)
   return (
     <>
       {chunk(4, pdfs).map((pdfChunk, i) => (
-        <Section odd={isOdd(i)} key={pdfChunk[0]}>
+        <Section odd={isOdd(i)} key={pdfChunk[0].file}>
           {positions(pdfChunk.length, size, paneDimensions).map((shape: Shape) => (
-            <Container key={`${shape.x}-${shape.y}`} {...shape} fullWidth={paneDimensions.width} visible={visible} />
+            <Container
+              key={`${shape.x}-${shape.y}`}
+              {...shape}
+              fullWidth={paneDimensions.width}
+              visible={visible}
+              onClick={() => console.log('TODO: Download PDFs')}
+            />
           ))}
         </Section>
       ))}
@@ -111,6 +131,15 @@ const IndexLayout: React.SFC = ({ children }) => (
             description
           }
         }
+        allMarkdownRemark {
+          edges {
+            node {
+              frontmatter {
+                file
+              }
+            }
+          }
+        }
       }
     `}
     render={(data: StaticQueryProps) => (
@@ -123,7 +152,7 @@ const IndexLayout: React.SFC = ({ children }) => (
           ]}
         />
         <LayoutMain>
-          <PdfsInSections />
+          <PdfsInSections pdfs={data.allMarkdownRemark.edges.map(({ node }) => node.frontmatter)} />
           <Link to="/more">
             <FixedRedButton>T J Watson</FixedRedButton>
           </Link>

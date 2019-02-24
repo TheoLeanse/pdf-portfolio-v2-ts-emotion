@@ -25,6 +25,7 @@ const Container = styled.div`
   ${dynamicStyle};
   position: absolute;
   background: black;
+  cursor: pointer;
 `
 
 export default Container
