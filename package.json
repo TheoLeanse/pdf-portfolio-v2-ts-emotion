@@ -26,6 +26,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.5",
     "@emotion/styled": "^10.0.5",
+    "@rehooks/window-size": "^1.0.2",
     "babel-plugin-styled-components": "^1.7.1",
     "classnames": "^2.2.6",
     "gatsby": "^2.0.85",
