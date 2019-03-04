@@ -106,7 +106,7 @@ const Section: React.SFC<{ odd: boolean; height: number }> = ({ odd, children, h
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
-const FixedRedButton = styled.button`
+export const FixedRedButton = styled.button`
   font-family: Helvetica, Arial, Sans-serif;
   position: fixed;
   bottom: 50px;
