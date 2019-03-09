@@ -15,7 +15,6 @@ import Container from '../components/Container'
 
 import { isOdd, withPositions } from '../utils'
 import css from '@emotion/css'
-import { isFunction } from 'lodash'
 
 type StaticQueryProps = {
   site: {
@@ -57,31 +56,33 @@ const useSetOnMount: <T>(initial: T, mounted: T) => T = (initial, mounted) => {
   return value
 }
 
-const useSetOnMountCB: <T>(initial: T, mounted: () => T) => T = (initial, mounted) => {
-  const [value, setValue] = useState(initial)
-  useEffect(() => {
-    setValue(mounted)
-  }, [])
-  return value
-}
-
 interface PdfsInSectionsProps {
   pdfs: {
     file: string
   }[]
 }
 
-const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
+const getWindowWidth = () => {
+  let width: number
+  try {
+    width = window.innerWidth
+  } catch (e) {
+    width = 0
+  }
+  return width
+}
+
+const PdfsInSections: React.FunctionComponent<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], props.pdfs)
-  const innerWidth = useSetOnMountCB(0, () => window && window.innerWidth)
+  const width = getWindowWidth()
   return (
     <>
       {chunk(4, pdfs).map((pdfChunk, i) => (
-        <Section odd={isOdd(i)} key={pdfChunk[0].file} height={innerWidth > 500 ? paneHeight : paneHeight * 1.5}>
-          {withPositions(pdfChunk, size, { height: innerWidth > 500 ? paneHeight : paneHeight * 1.5, width: innerWidth }).map(shape => (
+        <Section odd={isOdd(i)} key={pdfChunk[0].file} width={width} height={width > 500 ? paneHeight : paneHeight * 1.5}>
+          {withPositions(pdfChunk, size, { width, height: width > 500 ? paneHeight : paneHeight * 1.5 }).map(shape => (
             <a href={shape.file} key={`${shape.x}-${shape.y}`} target="_blank">
-              <Container {...shape} fullWidth={innerWidth} visible={visible} />
+              <Container {...shape} fullWidth={width} visible={visible} />
             </a>
           ))}
         </Section>
@@ -90,8 +91,9 @@ const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
   )
 }
 
-const dynamicStyle = ({ height }: { height: number }) => css`
+const dynamicStyle = ({ height, width }: { height: number; width: number }) => css`
   height: ${height}px;
+  width: ${width}px;
 `
 
 const ClubBackground = styled.div`
@@ -109,8 +111,16 @@ const ShipBackground = styled.div`
   background-repeat: no-repeat;
 `
 
-const Section: React.SFC<{ odd: boolean; height: number }> = ({ odd, children, height }) =>
-  odd ? <ClubBackground height={height}>{children}</ClubBackground> : <ShipBackground height={height}>{children}</ShipBackground>
+const Section: React.FunctionComponent<{ odd: boolean; height: number; width: number }> = ({ odd, children, height, width }) =>
+  odd ? (
+    <ClubBackground width={width} height={height}>
+      {children}
+    </ClubBackground>
+  ) : (
+    <ShipBackground width={width} height={height}>
+      {children}
+    </ShipBackground>
+  )
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
