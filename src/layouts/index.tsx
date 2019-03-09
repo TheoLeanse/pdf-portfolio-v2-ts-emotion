@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
-import useWindowSize from '@rehooks/window-size'
 import { StaticQuery, graphql, Link } from 'gatsby'
 import { chunk } from 'lodash/fp'
 import 'modern-normalize'
@@ -63,17 +62,27 @@ interface PdfsInSectionsProps {
   }[]
 }
 
-const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
+const getWindowWidth = () => {
+  let width: number
+  try {
+    width = window.innerWidth
+  } catch (e) {
+    width = 0
+  }
+  return width
+}
+
+const PdfsInSections: React.FunctionComponent<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], props.pdfs)
-  const { innerWidth } = useWindowSize()
+  const width = getWindowWidth()
   return (
     <>
       {chunk(4, pdfs).map((pdfChunk, i) => (
-        <Section odd={isOdd(i)} key={pdfChunk[0].file} height={innerWidth > 500 ? paneHeight : paneHeight * 1.5}>
-          {withPositions(pdfChunk, size, { height: innerWidth > 500 ? paneHeight : paneHeight * 1.5, width: innerWidth }).map(shape => (
+        <Section odd={isOdd(i)} key={pdfChunk[0].file} width={width} height={width > 500 ? paneHeight : paneHeight * 1.5}>
+          {withPositions(pdfChunk, size, { width, height: width > 500 ? paneHeight : paneHeight * 1.5 }).map(shape => (
             <a href={shape.file} key={`${shape.x}-${shape.y}`} target="_blank">
-              <Container {...shape} fullWidth={innerWidth} visible={visible} />
+              <Container {...shape} fullWidth={width} visible={visible} />
             </a>
           ))}
         </Section>
@@ -82,8 +91,9 @@ const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
   )
 }
 
-const dynamicStyle = ({ height }: { height: number }) => css`
+const dynamicStyle = ({ height, width }: { height: number; width: number }) => css`
   height: ${height}px;
+  width: ${width}px;
 `
 
 const ClubBackground = styled.div`
@@ -101,12 +111,20 @@ const ShipBackground = styled.div`
   background-repeat: no-repeat;
 `
 
-const Section: React.SFC<{ odd: boolean; height: number }> = ({ odd, children, height }) =>
-  odd ? <ClubBackground height={height}>{children}</ClubBackground> : <ShipBackground height={height}>{children}</ShipBackground>
+const Section: React.FunctionComponent<{ odd: boolean; height: number; width: number }> = ({ odd, children, height, width }) =>
+  odd ? (
+    <ClubBackground width={width} height={height}>
+      {children}
+    </ClubBackground>
+  ) : (
+    <ShipBackground width={width} height={height}>
+      {children}
+    </ShipBackground>
+  )
 
 // pause before rendering pdfs - use suspense with a timeout resource to have them all appear at the same time?
 
-const FixedRedButton = styled.button`
+export const FixedRedButton = styled.button`
   font-family: Helvetica, Arial, Sans-serif;
   position: fixed;
   bottom: 50px;
