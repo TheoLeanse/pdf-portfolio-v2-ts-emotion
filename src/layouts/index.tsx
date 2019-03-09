@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
-import useWindowSize from '@rehooks/window-size'
 import { StaticQuery, graphql, Link } from 'gatsby'
 import { chunk } from 'lodash/fp'
 import 'modern-normalize'
@@ -16,6 +15,7 @@ import Container from '../components/Container'
 
 import { isOdd, withPositions } from '../utils'
 import css from '@emotion/css'
+import { isFunction } from 'lodash'
 
 type StaticQueryProps = {
   site: {
@@ -57,6 +57,14 @@ const useSetOnMount: <T>(initial: T, mounted: T) => T = (initial, mounted) => {
   return value
 }
 
+const useSetOnMountCB: <T>(initial: T, mounted: () => T) => T = (initial, mounted) => {
+  const [value, setValue] = useState(initial)
+  useEffect(() => {
+    setValue(mounted)
+  }, [])
+  return value
+}
+
 interface PdfsInSectionsProps {
   pdfs: {
     file: string
@@ -66,7 +74,7 @@ interface PdfsInSectionsProps {
 const PdfsInSections: React.SFC<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], props.pdfs)
-  const { innerWidth } = useWindowSize()
+  const innerWidth = useSetOnMountCB(0, () => window && window.innerWidth)
   return (
     <>
       {chunk(4, pdfs).map((pdfChunk, i) => (
