@@ -102,6 +102,7 @@ const ClubBackground = styled.div`
   background-image: url(${workersClub});
   background-position: center;
   background-repeat: no-repeat;
+  background-size: 66%;
 `
 const ShipBackground = styled.div`
   ${dynamicStyle};
@@ -109,6 +110,7 @@ const ShipBackground = styled.div`
   background-image: url(${containerShip});
   background-position: center;
   background-repeat: no-repeat;
+  background-size: 66%;
 `
 
 const Section: React.FunctionComponent<{ odd: boolean; height: number; width: number }> = ({ odd, children, height, width }) =>
