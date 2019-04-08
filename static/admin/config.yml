@@ -1,6 +1,6 @@
 backend:
-  name: github
-  repo: TheoLeanse/pdf-portfolio-v2-ts-emotion
+  name: git-gateway
+  branch: master
 
 media_folder: static/assets
 public_folder: assets
