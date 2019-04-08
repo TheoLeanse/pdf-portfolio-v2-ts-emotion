@@ -18,3 +18,9 @@ collections:
         media_library:
           config:
             multiple: true
+      - label: thumbnail
+        name: thumbnail
+        widget: file
+        media_library:
+          config:
+            multiple: true
