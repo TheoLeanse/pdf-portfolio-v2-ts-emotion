@@ -3,9 +3,11 @@ import { StaticQuery, graphql, Link } from 'gatsby'
 import LayoutRoot from '../components/LayoutRoot'
 import Helmet from 'react-helmet'
 import LayoutMain from '../components/LayoutMain'
-import { FixedRedButton } from '../layouts'
+import { FixedRedButton, getWindowWidth } from '../layouts'
 import styled from '@emotion/styled'
+import css from '@emotion/css'
 import watch from '../watch.svg'
+import { withPositions } from '../utils'
 
 type StaticQueryProps = {
   site: {
@@ -26,21 +28,66 @@ const AboutContainer = styled.div`
   height: 100vh;
 `
 
-const AboutInner = styled.div`
-  margin: 0 auto;
-  max-width: 300px;
-  padding-top: 20vh;
+const AboutBackground = styled.div`
+  background-image: url(${watch});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: black;
+  background-size: 50vh;
+  height: 100vh;
 `
 
-const About: React.SFC = () => (
-  <AboutContainer>
-    <AboutInner>
-      <p>T J Watson is an artist.</p>
-      <p>Working in London and elsewhere.</p>
-      <p>tjw [at] tjwatson.co.uk</p>
-    </AboutInner>
-  </AboutContainer>
-)
+const paneHeight = 750
+
+const dynamicStyle = ({ x, y }: { x: number; y: number }) => css`
+  top: ${x}px;
+  left: ${y}px;
+`
+
+const TextBox = styled.div`
+  ${dynamicStyle};
+  position: absolute;
+  color: white;
+`
+
+const texts = [
+  {
+    content: `<p>T J Watson is an artist.</p>
+  <p>Working in London and elsewhere.</p>
+  <p>tjw [at] tjwatson.co.uk</p>`
+  },
+  {
+    content: `<p>T J Watson is an artist.</p>
+  <p>Working in London and elsewhere.</p>
+  <p>tjw [at] tjwatson.co.uk</p>`
+  },
+  {
+    content: `<p>T J Watson is an artist.</p>
+  <p>Working in London and elsewhere.</p>
+  <p>tjw [at] tjwatson.co.uk</p>`
+  }
+]
+
+const TextboxesInPosition = () => {
+  const paneWidth = getWindowWidth()
+  const textsWithPositions = withPositions(
+    texts,
+    { height: 200, width: 100 },
+    { width: paneWidth, height: paneWidth > 500 ? paneHeight : paneHeight * 1.5 }
+  )
+  return (
+    <div>
+      {textsWithPositions.map(textWithPosition => (
+        <TextBox
+          key={`${textWithPosition.x}-${textWithPosition.y}`}
+          x={textWithPosition.x}
+          y={textWithPosition.y}
+          dangerouslySetInnerHTML={{ __html: textWithPosition.content }}
+        />
+      ))}
+    </div>
+  )
+}
 
 const PageTwo: React.SFC = () => (
   <StaticQuery
@@ -64,9 +111,10 @@ const PageTwo: React.SFC = () => (
           ]}
         />
         <LayoutMain>
-          <About />
+          <AboutBackground />
+          <TextboxesInPosition />
           <Link to="/">
-            <FixedRedButton>Back</FixedRedButton>
+            <FixedRedButton>Work</FixedRedButton>
           </Link>
         </LayoutMain>
       </LayoutRoot>
