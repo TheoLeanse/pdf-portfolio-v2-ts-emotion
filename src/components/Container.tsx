@@ -1,7 +1,7 @@
 import { css, keyframes } from '@emotion/core'
 import styled from '@emotion/styled'
 
-const fadeIn = keyframes`
+export const fadeIn = keyframes`
   from {
     opacity: 0;
   }
