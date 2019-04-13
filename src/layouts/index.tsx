@@ -62,7 +62,7 @@ interface PdfsInSectionsProps {
   }[]
 }
 
-const getWindowWidth = () => {
+export const getWindowWidth = () => {
   let width: number
   try {
     width = window.innerWidth
