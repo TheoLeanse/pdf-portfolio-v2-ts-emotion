@@ -28,6 +28,7 @@ type StaticQueryProps = {
       node: {
         frontmatter: {
           file: string
+          thumbnail: string
         }
       }
     }
@@ -59,6 +60,7 @@ const useSetOnMount: <T>(initial: T, mounted: T) => T = (initial, mounted) => {
 interface PdfsInSectionsProps {
   pdfs: {
     file: string
+    thumbnail: string
   }[]
 }
 
@@ -157,6 +159,7 @@ const IndexLayout: React.SFC = ({ children }) => (
             node {
               frontmatter {
                 file
+                thumbnail
               }
             }
           }

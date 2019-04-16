@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 import css from '@emotion/css'
 import watch from '../watch.svg'
 import { withPositions } from '../utils'
+import { fadeIn } from '../components/Container'
 
 type StaticQueryProps = {
   site: {
@@ -42,6 +43,7 @@ const paneHeight = 750
 const dynamicStyle = ({ x, y }: { x: number; y: number }) => css`
   top: ${x}px;
   left: ${y}px;
+  animation: ${fadeIn} 0.75s ease-in;
 `
 
 const TextBox = styled.div`
