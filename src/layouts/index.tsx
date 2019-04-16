@@ -74,13 +74,16 @@ export const getWindowWidth = () => {
   return width
 }
 
+// TODO: enable editng via CMS
+const PDFS_PER_SECTION = 5
+
 const PdfsInSections: React.FunctionComponent<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], props.pdfs)
   const width = getWindowWidth()
   return (
     <>
-      {chunk(4, pdfs).map((pdfChunk, i) => (
+      {chunk(PDFS_PER_SECTION, pdfs).map((pdfChunk, i) => (
         <Section odd={isOdd(i)} key={pdfChunk[0].file} width={width} height={width > 500 ? paneHeight : paneHeight * 1.5}>
           {withPositions(pdfChunk, size, { width, height: width > 500 ? paneHeight : paneHeight * 1.5 }).map(shape => (
             <a href={shape.file} key={`${shape.x}-${shape.y}`} target="_blank">
