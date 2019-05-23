@@ -1,6 +1,6 @@
 ---
 title: K
-file: /assets/decalarative-uis-are-the-future-and-the-future-is-comonadic.pdf
-thumbnail: /assets/tjw010417-opt.jpg
+file: /assets/tjw010419.pdf
+thumbnail: /assets/mediation-vanishes.jpg
 ---
 

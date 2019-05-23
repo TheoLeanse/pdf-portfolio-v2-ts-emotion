@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql, Link } from 'gatsby'
-import { chunk } from 'lodash/fp'
+import { chunk, shuffle } from 'lodash/fp'
 import 'modern-normalize'
 import '../styles/normalize'
 
@@ -74,13 +74,16 @@ export const getWindowWidth = () => {
   return width
 }
 
+// TODO: enable editng via CMS
+const PDFS_PER_SECTION = 5
+
 const PdfsInSections: React.FunctionComponent<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
-  const pdfs = useSetOnMount([], props.pdfs)
+  const pdfs = useSetOnMount([], shuffle(props.pdfs))
   const width = getWindowWidth()
   return (
     <>
-      {chunk(4, pdfs).map((pdfChunk, i) => (
+      {chunk(PDFS_PER_SECTION, pdfs).map((pdfChunk, i) => (
         <Section odd={isOdd(i)} key={pdfChunk[0].file} width={width} height={width > 500 ? paneHeight : paneHeight * 1.5}>
           {withPositions(pdfChunk, size, { width, height: width > 500 ? paneHeight : paneHeight * 1.5 }).map(shape => (
             <a href={shape.file} key={`${shape.x}-${shape.y}`} target="_blank">
@@ -104,7 +107,7 @@ const ClubBackground = styled.div`
   background-image: url(${workersClub});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 66%;
+  background-size: 50%;
 `
 const ShipBackground = styled.div`
   ${dynamicStyle};
@@ -177,7 +180,7 @@ const IndexLayout: React.SFC = ({ children }) => (
         />
         <LayoutMain>
           <PdfsInSections pdfs={data.allMarkdownRemark.edges.map(({ node }) => node.frontmatter)} />
-          <Link to="/more">
+          <Link to="/tjw">
             <FixedRedButton>T J Watson</FixedRedButton>
           </Link>
         </LayoutMain>

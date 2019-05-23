@@ -1,6 +1,6 @@
 ---
 title: O
-file: /assets/access-path-selection-rdbms.pdf
-thumbnail: /assets/tjw010417-opt.jpg
+file: /assets/tjw151216.pdf
+thumbnail: /assets/tjw151216-opt.jpg
 ---
 

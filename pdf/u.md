@@ -1,6 +1,6 @@
 ---
 title: U
-file: /assets/roads_curtis_microsound.pdf
-thumbnail: /assets/tjw010417-opt.jpg
+file: /assets/tjw151218.pdf
+thumbnail: /assets/tjw151218-opt.jpg
 ---
 
