@@ -75,11 +75,7 @@ const texts = [
 
 const TextboxesInPosition = () => {
   const paneWidth = getWindowWidth()
-  const textsWithPositions = withPositions(
-    texts,
-    { height: 200, width: 100 },
-    { width: paneWidth, height: paneWidth > 500 ? paneHeight : paneHeight * 1.5 }
-  )
+  const textsWithPositions = withPositions(texts, { height: 200, width: 100 }, { width: paneWidth, height: paneHeight })
   return (
     <div>
       {textsWithPositions.map(textWithPosition => (
