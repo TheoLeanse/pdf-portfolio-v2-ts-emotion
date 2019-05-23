@@ -75,7 +75,6 @@ const texts = [
 
 const TextboxesInPosition = () => {
   const paneWidth = getWindowWidth()
-  console.log('paneWidth:', paneWidth)
   const textsWithPositions = withPositions(
     texts,
     { height: 200, width: 100 },
