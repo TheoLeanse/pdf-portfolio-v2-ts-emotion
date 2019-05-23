@@ -50,6 +50,9 @@ const TextBox = styled.div`
   ${dynamicStyle};
   position: absolute;
   color: white;
+  border: white solid 1px;
+  padding: 5px;
+  background: black;
 `
 
 const texts = [
