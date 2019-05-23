@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql, Link } from 'gatsby'
-import { chunk } from 'lodash/fp'
+import { chunk, shuffle } from 'lodash/fp'
 import 'modern-normalize'
 import '../styles/normalize'
 
@@ -76,7 +76,7 @@ export const getWindowWidth = () => {
 
 const PdfsInSections: React.FunctionComponent<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
-  const pdfs = useSetOnMount([], props.pdfs)
+  const pdfs = useSetOnMount([], shuffle(props.pdfs))
   const width = getWindowWidth()
   return (
     <>
@@ -104,7 +104,7 @@ const ClubBackground = styled.div`
   background-image: url(${workersClub});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 66%;
+  background-size: 50%;
 `
 const ShipBackground = styled.div`
   ${dynamicStyle};
@@ -177,7 +177,7 @@ const IndexLayout: React.SFC = ({ children }) => (
         />
         <LayoutMain>
           <PdfsInSections pdfs={data.allMarkdownRemark.edges.map(({ node }) => node.frontmatter)} />
-          <Link to="/more">
+          <Link to="/tjw">
             <FixedRedButton>T J Watson</FixedRedButton>
           </Link>
         </LayoutMain>

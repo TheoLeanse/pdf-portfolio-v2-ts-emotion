@@ -50,6 +50,9 @@ const TextBox = styled.div`
   ${dynamicStyle};
   position: absolute;
   color: white;
+  border: white solid 1px;
+  padding: 5px;
+  background: black;
 `
 
 const texts = [
@@ -72,6 +75,7 @@ const texts = [
 
 const TextboxesInPosition = () => {
   const paneWidth = getWindowWidth()
+  console.log('paneWidth:', paneWidth)
   const textsWithPositions = withPositions(
     texts,
     { height: 200, width: 100 },
