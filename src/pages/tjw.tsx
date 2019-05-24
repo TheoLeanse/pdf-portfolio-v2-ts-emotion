@@ -41,8 +41,8 @@ const AboutBackground = styled.div`
 const paneHeight = 750
 
 const dynamicStyle = ({ x, y }: { x: number; y: number }) => css`
-  top: ${x}px;
-  left: ${y}px;
+  top: ${y}px;
+  left: ${x}px;
   animation: ${fadeIn} 0.75s ease-in;
 `
 
@@ -62,22 +62,12 @@ const texts = [
   <p>Working in London and elsewhere.</p>
   <p>tjw [at] t-j-watson.co.uk</p>`
   }
-  // {
-  //   content: `<p>T J Watson is an artist.</p>
-  // <p>Working in London and elsewhere.</p>
-  // <p>tjw [at] tjwatson.co.uk</p>`
-  // },
-  // {
-  //   content: `<p>T J Watson is an artist.</p>
-  // <p>Working in London and elsewhere.</p>
-  // <p>tjw [at] tjwatson.co.uk</p>`
-  // }
 ]
 
 const TextboxesInPosition = () => {
   const paneWidth = getWindowWidth()
   const height = paneWidth > 500 ? paneHeight : paneHeight * 1.5
-  const textsWithPositions = withPositions(texts, { height: 200, width: 100 }, { width: paneWidth, height })
+  const textsWithPositions = withPositions(texts, { height: 200, width: 100 }, { height, width: paneWidth })
   return (
     <div>
       {textsWithPositions.map(textWithPosition => (
