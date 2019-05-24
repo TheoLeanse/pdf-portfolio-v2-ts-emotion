@@ -31,7 +31,6 @@ collections:
         label: config
         name: config
         fields:
-          fields:
           - { label: "Template Key", name: "templateKey", widget: "hidden", default: "navbar" }
           - label: "Menu Items"
             name: "menuItems"
