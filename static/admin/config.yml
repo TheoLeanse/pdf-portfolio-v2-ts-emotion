@@ -24,3 +24,13 @@ collections:
         media_library:
           config:
             multiple: true
+  - name: generalConfig
+    label: "Site Configuration"
+    files:
+      - file: 'src/config.md'
+        label: config
+        name: config
+        fields:
+          - { label: "Site description (SEO)", name: "siteDescription", widget: "string" }
+
+
