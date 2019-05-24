@@ -2,14 +2,8 @@
 
 module.exports = {
   siteMetadata: {
-    title: 'gatsby-starter-typescript-plus',
-    description: 'A starter kit for TypeScript-based Gatsby projects with sensible defaults.',
-    siteUrl: 'https://gatsby-starter-typescript-plus.netlify.com',
-    author: {
-      name: 'Resi Respati',
-      url: 'https://twitter.com/resir014',
-      email: 'resir014@gmail.com'
-    }
+    title: 'T J Watson',
+    description: 'Artist. Working in London and elsewhere.' // Make editable in CMS
   },
   plugins: [
     {
