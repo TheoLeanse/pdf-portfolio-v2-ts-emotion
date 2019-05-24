@@ -1,3 +1,0 @@
----
-siteDescription: 'blah blah blah'
----
