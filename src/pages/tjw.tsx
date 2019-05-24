@@ -55,22 +55,23 @@ const TextBox = styled.div`
   background: black;
 `
 
+// from CMS
 const texts = [
   {
     content: `<p>T J Watson is an artist.</p>
   <p>Working in London and elsewhere.</p>
-  <p>tjw [at] tjwatson.co.uk</p>`
-  },
-  {
-    content: `<p>T J Watson is an artist.</p>
-  <p>Working in London and elsewhere.</p>
-  <p>tjw [at] tjwatson.co.uk</p>`
-  },
-  {
-    content: `<p>T J Watson is an artist.</p>
-  <p>Working in London and elsewhere.</p>
-  <p>tjw [at] tjwatson.co.uk</p>`
+  <p>tjw [at] t-j-watson.co.uk</p>`
   }
+  // {
+  //   content: `<p>T J Watson is an artist.</p>
+  // <p>Working in London and elsewhere.</p>
+  // <p>tjw [at] tjwatson.co.uk</p>`
+  // },
+  // {
+  //   content: `<p>T J Watson is an artist.</p>
+  // <p>Working in London and elsewhere.</p>
+  // <p>tjw [at] tjwatson.co.uk</p>`
+  // }
 ]
 
 const TextboxesInPosition = () => {
