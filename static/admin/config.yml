@@ -39,5 +39,20 @@ collections:
             - { label: "Label", name: "label", widget: "string" }
             - { label: "Link Type", name: "linkType", widget: "select", options: ["internal", "external"] }
             - { label: "Link URL", name: "linkURL", widget: "string", hint: "Use a relative URL (e.g. /about) if the link is an internal link." }
+          - { label: "Site description", name: "sideDescription", widget: "string", hint: "This will go into the google" }
+          - label: "PDFs per section"
+            name: "pdfsPerSection"
+            widget: "number"
+            default: 4
+            valueType: "int"
+            min: 1
+            max: 6
+            step: 1
+          - label: "About me items"
+            name: "aboutItems"
+            widget: "list"
+            fields:
+            - { label: "content", name: "content", widget: "markdown" }
+
 
 
