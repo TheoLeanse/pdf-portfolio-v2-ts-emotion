@@ -27,19 +27,17 @@ collections:
   - name: generalConfig
     label: "Site Configuration"
     files:
-      - file: 'src/config.md'
-        label: config
-        name: config
+      - file: 'src/site-description.md'
+        label: siteDescription
+        name: siteDescription
         fields:
           - { label: "Template Key", name: "templateKey", widget: "hidden", default: "navbar" }
-          - label: "Menu Items"
-            name: "menuItems"
-            widget: "list"
-            fields:
-            - { label: "Label", name: "label", widget: "string" }
-            - { label: "Link Type", name: "linkType", widget: "select", options: ["internal", "external"] }
-            - { label: "Link URL", name: "linkURL", widget: "string", hint: "Use a relative URL (e.g. /about) if the link is an internal link." }
           - { label: "Site description", name: "sideDescription", widget: "string", hint: "This will go into the google" }
+      - file: 'src/pdfs-per-section.md'
+        label: pdfsPerSection
+        name: pdfsPerSection
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "navbar" }
           - label: "PDFs per section"
             name: "pdfsPerSection"
             widget: "number"
@@ -48,8 +46,13 @@ collections:
             min: 1
             max: 6
             step: 1
+      - file: 'src/about-me-items.md'
+        label: aboutMeItems
+        name: aboutMeItems
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "navbar" }
           - label: "About me items"
-            name: "aboutItems"
+            name: "aboutMeItems"
             widget: "list"
             fields:
             - { label: "content", name: "content", widget: "markdown" }
