@@ -1,4 +1,4 @@
 ---
-sideDescription: Artist. Working in London and elsewhere.
+sideDescription: Artist. London and elsewhere.
 ---
 
