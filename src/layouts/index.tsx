@@ -33,6 +33,12 @@ type StaticQueryProps = {
       }
     }
   }
+  siteDescription: {
+    frontmatter: { sideDescription: string }
+  }
+  pdfsPerSection: {
+    frontmatter: { pdfsPerSection: number }
+  }
 }
 
 // A4: 210 × 297
@@ -62,6 +68,7 @@ interface PdfsInSectionsProps {
     file: string
     thumbnail: string
   }[]
+  pdfsPerSection: number
 }
 
 export const getWindowWidth = () => {
@@ -74,16 +81,13 @@ export const getWindowWidth = () => {
   return width
 }
 
-// TODO: enable editng via CMS
-const PDFS_PER_SECTION = 5
-
 const PdfsInSections: React.FunctionComponent<PdfsInSectionsProps> = props => {
   const visible = useVisibilityDelay(750)
   const pdfs = useSetOnMount([], shuffle(props.pdfs))
   const width = getWindowWidth()
   return (
     <>
-      {chunk(PDFS_PER_SECTION, pdfs).map((pdfChunk, i) => (
+      {chunk(props.pdfsPerSection, pdfs).map((pdfChunk, i) => (
         <Section odd={isOdd(i)} key={pdfChunk[0].file} width={width} height={width > 500 ? paneHeight : paneHeight * 1.5}>
           {withPositions(pdfChunk, size, { width, height: width > 500 ? paneHeight : paneHeight * 1.5 }).map(shape => (
             <a href={shape.file} key={`${shape.x}-${shape.y}`} target="_blank">
@@ -167,6 +171,23 @@ const IndexLayout: React.SFC = ({ children }) => (
             }
           }
         }
+        aboutMeItems: markdownRemark(fileAbsolutePath: { regex: "/about-me-items/" }) {
+          frontmatter {
+            aboutMeItems {
+              content
+            }
+          }
+        }
+        pdfsPerSection: markdownRemark(fileAbsolutePath: { regex: "/pdfs-per-section/" }) {
+          frontmatter {
+            pdfsPerSection
+          }
+        }
+        siteDescription: markdownRemark(fileAbsolutePath: { regex: "/site-description/" }) {
+          frontmatter {
+            sideDescription
+          }
+        }
       }
     `}
     render={(data: StaticQueryProps) => (
@@ -174,12 +195,15 @@ const IndexLayout: React.SFC = ({ children }) => (
         <Helmet
           title={data.site.siteMetadata.title}
           meta={[
-            { name: 'description', content: data.site.siteMetadata.description },
+            { name: 'description', content: data.siteDescription.frontmatter.sideDescription },
             { name: 'keywords', content: 'gatsbyjs, gatsby, javascript, sample, something' }
           ]}
         />
         <LayoutMain>
-          <PdfsInSections pdfs={data.allMarkdownRemark.edges.map(({ node }) => node.frontmatter)} />
+          <PdfsInSections
+            pdfsPerSection={data.pdfsPerSection.frontmatter.pdfsPerSection}
+            pdfs={data.allMarkdownRemark.edges.map(({ node }) => node.frontmatter).filter(frontmatter => Boolean(frontmatter.file))}
+          />
           <Link to="/tjw">
             <FixedRedButton>T J Watson</FixedRedButton>
           </Link>

@@ -14,6 +14,27 @@ module.exports = {
       }
     },
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'aboutMeContent',
+        path: `${__dirname}/src/about-me-items.md`
+      }
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'pdfsPerSection',
+        path: `${__dirname}/src/pdfs-per-section.md`
+      }
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'siteDescription',
+        path: `${__dirname}/src/site-description.md`
+      }
+    },
+    {
       resolve: 'gatsby-transformer-remark',
       options: {
         plugins: [
