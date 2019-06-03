@@ -1,10 +1,7 @@
 ---
 aboutMeItems:
-  - content: |-
-      T J Watson is an artist.
-
-      Working in London and elsewhere.
-
-      tjw \[at] t-j-watson.com
+  - content: _T J Watson is an artist._
+  - content: _Working in London and elsewhere._
+  - content: '_tjw \[at] t-j-watson.com_'
 ---
 
