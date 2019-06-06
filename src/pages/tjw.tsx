@@ -9,6 +9,7 @@ import css from '@emotion/css'
 import watch from '../watch.svg'
 import { withPositions } from '../utils'
 import { fadeIn } from '../components/Container'
+import marked from 'marked'
 
 type StaticQueryProps = {
   site: {
@@ -16,6 +17,12 @@ type StaticQueryProps = {
       title: string
       description: string
     }
+  }
+  siteDescription: {
+    frontmatter: { sideDescription: string }
+  }
+  aboutMeItems: {
+    frontmatter: { aboutMeItems: string }
   }
 }
 
@@ -55,16 +62,7 @@ const TextBox = styled.div`
   background: black;
 `
 
-// from CMS
-const texts = [
-  {
-    content: `<p>T J Watson is an artist.</p>
-  <p>Working in London and elsewhere.</p>
-  <p>tjw [at] t-j-watson.com</p>`
-  }
-]
-
-const TextboxesInPosition = () => {
+const TextboxesInPosition = ({ texts }) => {
   const paneWidth = getWindowWidth()
   const height = paneWidth > 500 ? paneHeight : paneHeight * 1.5
   const textsWithPositions = withPositions(texts, { height: 200, width: 100 }, { height, width: paneWidth })
@@ -75,7 +73,7 @@ const TextboxesInPosition = () => {
           key={`${textWithPosition.x}-${textWithPosition.y}`}
           x={textWithPosition.x}
           y={textWithPosition.y}
-          dangerouslySetInnerHTML={{ __html: textWithPosition.content }}
+          dangerouslySetInnerHTML={{ __html: marked(textWithPosition.content) }}
         />
       ))}
     </div>
@@ -89,29 +87,42 @@ const PageTwo: React.SFC = () => (
         site {
           siteMetadata {
             title
-            description
+          }
+        }
+        aboutMeItems: markdownRemark(fileAbsolutePath: { regex: "/about-me-items/" }) {
+          frontmatter {
+            aboutMeItems {
+              content
+            }
+          }
+        }
+        siteDescription: markdownRemark(fileAbsolutePath: { regex: "/site-description/" }) {
+          frontmatter {
+            sideDescription
           }
         }
       }
     `}
-    render={(data: StaticQueryProps) => (
-      <LayoutRoot>
-        <Helmet
-          title={data.site.siteMetadata.title}
-          meta={[
-            { name: 'description', content: data.site.siteMetadata.description },
-            { name: 'keywords', content: 'gatsbyjs, gatsby, javascript, sample, something' }
-          ]}
-        />
-        <LayoutMain>
-          <AboutBackground />
-          <TextboxesInPosition />
-          <Link to="/">
-            <FixedRedButton>Work</FixedRedButton>
-          </Link>
-        </LayoutMain>
-      </LayoutRoot>
-    )}
+    render={(data: StaticQueryProps) => {
+      return (
+        <LayoutRoot>
+          <Helmet
+            title={data.site.siteMetadata.title}
+            meta={[
+              { name: 'description', content: data.siteDescription.frontmatter.sideDescription },
+              { name: 'keywords', content: 'gatsbyjs, gatsby, javascript, sample, something' }
+            ]}
+          />
+          <LayoutMain>
+            <AboutBackground />
+            <TextboxesInPosition texts={data.aboutMeItems.frontmatter.aboutMeItems} />
+            <Link to="/">
+              <FixedRedButton>Work</FixedRedButton>
+            </Link>
+          </LayoutMain>
+        </LayoutRoot>
+      )
+    }}
   />
 )
 
