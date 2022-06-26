@@ -1,4 +1,4 @@
 ---
-pdfsPerSection: 6
+pdfsPerSection: 5
 ---
 
